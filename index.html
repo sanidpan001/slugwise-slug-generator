@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en" id="top">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SlugWise — Free URL Slug Generator | SEO-Friendly Blog Slugs</title>
+<meta name="description" content="SlugWise is a free online URL slug generator. Turn any blog title into an SEO-friendly slug with accent transliteration, stop-word removal, length control, bulk mode, multi-case output and an instant SEO slug score.">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: { extend: {
+    colors: { paper:'#FDFBF7', cream:'#F7F1E5', espresso:'#3F2D20', tang:'#F97316', tangdark:'#EA580C' },
+    fontFamily: { serif:['Georgia','"Times New Roman"','serif'] }
+  } }
+};
+</script>
+<style>
+  body { font-family: Georgia, 'Times New Roman', serif; }
+  .sans { font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif; }
+  .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  .paper-lines { background-image: repeating-linear-gradient(transparent, transparent 31px, rgba(63,45,32,.07) 32px); }
+  .tab-active { background:#3F2D20; color:#FDFBF7; }
+  .seg-active { background:#F97316; color:#fff; border-color:#F97316; }
+  details.faq-item summary::-webkit-details-marker { display:none; }
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "SlugWise",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "description": "Free online URL slug generator: turn blog titles into SEO-friendly slugs with transliteration, stop-word removal, bulk mode and an SEO slug score."
+}
+</script>
+</head>
+<body class="bg-paper text-espresso antialiased">
+
+<!-- ===================== HEADER ===================== -->
+<header class="sticky top-0 z-40 bg-paper/95 backdrop-blur border-b-2 border-espresso">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6 h-16 flex items-center justify-between">
+    <a href="#top" class="text-2xl font-bold tracking-tight">Slug<span class="text-tang">Wise</span><span class="text-tang">.</span></a>
+    <nav class="sans text-sm font-medium flex items-center gap-5">
+      <a href="#top" class="hover:text-tang transition">Home</a>
+      <a href="https://fixoraa.tech" class="hover:text-tang transition">More Tools</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ===================== HERO ===================== -->
+<section class="mx-auto max-w-6xl px-4 sm:px-6 pt-10 pb-2 text-center">
+  <span class="sans inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.18em] bg-tang text-white px-4 py-1.5 rounded-full shadow">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+    Unlimited Free Usage
+  </span>
+  <h1 class="text-4xl sm:text-5xl font-bold mt-5 leading-tight">Turn any title into a<br class="hidden sm:block"> perfect <span class="text-tang">URL slug</span>.</h1>
+  <p class="sans text-espresso/70 max-w-2xl mx-auto mt-4 text-base sm:text-lg">SlugWise converts blog titles into clean, SEO-friendly slugs — lowercase, hyphenated, accents stripped — with live preview, bulk mode, multi-case output and an instant SEO score. No signup, no paywall, no watermark.</p>
+</section>
+
+<!-- ===================== TOP AD (verbatim) ===================== -->
+<div class="no-print mx-auto max-w-6xl px-4 sm:px-6 pt-4" role="complementary" aria-label="Advertisement">
+  <div class="mx-auto text-center" style="max-width:728px">
+    <span class="block text-[10px] tracking-[0.18em] uppercase text-slate-400 mb-1.5">Advertisement</span>
+    <div class="flex justify-center overflow-hidden">
+      <div class="origin-top scale-[0.44] sm:scale-100 shrink-0">
+        <script>
+          atOptions = { 'key' : '4e68ac77881c17fe128a46565d9a4e8c', 'format' : 'iframe', 'height' : 90, 'width' : 728, 'params' : {} };
+        </script>
+        <script src="https://www.highrevenueformat.com/4e68ac77881c17fe128a46565d9a4e8c/invoke.js"></script>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== TOOL ===================== -->
+<main id="tool" class="mx-auto max-w-6xl px-4 sm:px-6 py-8">
+  <div class="bg-cream border-2 border-espresso rounded-2xl shadow-[6px_6px_0_#3F2D20] overflow-hidden">
+
+    <!-- mode tabs -->
+    <div class="sans flex border-b-2 border-espresso">
+      <button id="modeSingle" class="tab-active flex-1 px-4 py-3.5 text-sm font-bold uppercase tracking-widest transition">Single title</button>
+      <button id="modeBulk" class="flex-1 px-4 py-3.5 text-sm font-bold uppercase tracking-widest text-espresso/60 hover:text-espresso transition">Bulk mode <span class="ml-1 text-[10px] bg-tang text-white rounded-full px-2 py-0.5 align-middle">up to 50</span></button>
+    </div>
+
+    <!-- ============ SINGLE PANEL ============ -->
+    <div id="panelSingle" class="p-5 sm:p-8">
+      <label for="titleInput" class="sans text-xs font-bold uppercase tracking-[0.18em] text-espresso/60">Blog post title</label>
+      <input id="titleInput" type="text" autocomplete="off" spellcheck="false"
+        placeholder="e.g. Café Culture: 10 Morning Rituals for Better Focus"
+        class="paper-lines sans mt-2 w-full text-xl sm:text-2xl bg-white border-2 border-espresso rounded-xl px-4 py-4 placeholder:text-espresso/30 focus:outline-none focus:ring-4 focus:ring-tang/30">
+
+      <!-- options -->
+      <div class="sans mt-5 grid gap-4 sm:grid-cols-3">
+        <div>
+          <div class="text-xs font-bold uppercase tracking-[0.18em] text-espresso/60 mb-2">Separator</div>
+          <div class="flex gap-2" role="radiogroup" aria-label="Separator">
+            <button data-sep="-" class="seg-btn seg-active flex-1 border-2 border-espresso rounded-lg px-2 py-2 text-sm font-bold mono">hyphen -</button>
+            <button data-sep="_" class="seg-btn flex-1 border-2 border-espresso rounded-lg px-2 py-2 text-sm font-bold mono">under _</button>
+            <button data-sep="." class="seg-btn flex-1 border-2 border-espresso rounded-lg px-2 py-2 text-sm font-bold mono">dot .</button>
+          </div>
+        </div>
+        <div>
+          <label for="maxLen" class="block text-xs font-bold uppercase tracking-[0.18em] text-espresso/60 mb-2">Max length (chars)</label>
+          <input id="maxLen" type="number" min="10" max="120" value="60"
+            class="sans w-full border-2 border-espresso rounded-lg px-3 py-2 text-sm font-bold bg-white focus:outline-none focus:ring-4 focus:ring-tang/30">
+        </div>
+        <div class="flex items-end">
+          <label class="sans flex items-center gap-3 cursor-pointer select-none border-2 border-espresso rounded-lg px-3 py-2 bg-white w-full">
+            <input id="stopWords" type="checkbox" checked class="w-5 h-5 accent-[#F97316]">
+            <span class="text-sm font-bold">Remove stop words<br><span class="font-normal text-espresso/60 text-xs">the, and, of, with…</span></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- case tabs -->
+      <div class="sans mt-6 flex gap-2" role="tablist" aria-label="Case style">
+        <button data-case="kebab" class="case-btn tab-active border-2 border-espresso rounded-lg px-4 py-2 text-sm font-bold mono transition">slug / kebab-case</button>
+        <button data-case="snake" class="case-btn border-2 border-espresso rounded-lg px-4 py-2 text-sm font-bold mono text-espresso/60 transition">snake_case</button>
+        <button data-case="camel" class="case-btn border-2 border-espresso rounded-lg px-4 py-2 text-sm font-bold mono text-espresso/60 transition">camelCase</button>
+      </div>
+
+      <!-- live preview card -->
+      <div class="mt-3 bg-espresso text-paper rounded-xl p-5 sm:p-6 shadow-inner">
+        <div class="sans flex items-center justify-between gap-3 flex-wrap">
+          <span class="text-[11px] font-bold uppercase tracking-[0.22em] text-paper/60">Live slug preview</span>
+          <span class="text-[11px] mono text-paper/60"><span id="charCount">0</span> chars · <span id="wordCount">0</span> words</span>
+        </div>
+        <div class="mt-3 flex items-start gap-3">
+          <p id="slugPreview" class="mono text-xl sm:text-2xl break-all text-tang leading-snug flex-1">your-awesome-slug</p>
+          <button id="copyBtn" class="sans shrink-0 bg-tang hover:bg-tangdark text-white text-sm font-bold px-4 py-2.5 rounded-lg transition">Copy</button>
+        </div>
+        <p id="copyMsg" class="sans text-xs text-paper/50 mt-2 h-4"></p>
+      </div>
+
+      <!-- transliteration preview -->
+      <div class="sans mt-5 bg-white border-2 border-espresso/20 rounded-xl p-4">
+        <div class="text-xs font-bold uppercase tracking-[0.18em] text-espresso/60 mb-2">Accent &amp; transliteration mapping</div>
+        <div id="translitChips" class="flex flex-wrap gap-2"></div>
+        <p id="translitEmpty" class="text-sm text-espresso/50">Type a title with accents (e.g. café, naïve, Straße, Æsop) to see each character's before → after mapping.</p>
+      </div>
+
+      <!-- SEO score -->
+      <div class="sans mt-5 bg-white border-2 border-espresso rounded-xl p-5">
+        <div class="flex items-center gap-5 flex-wrap">
+          <div class="relative w-24 h-24 shrink-0">
+            <svg viewBox="0 0 100 100" class="w-24 h-24 -rotate-90">
+              <circle cx="50" cy="50" r="42" fill="none" stroke="#F7F1E5" stroke-width="12"/>
+              <circle id="scoreRing" cx="50" cy="50" r="42" fill="none" stroke="#F97316" stroke-width="12" stroke-linecap="round" stroke-dasharray="264" stroke-dashoffset="264"/>
+            </svg>
+            <div class="absolute inset-0 flex items-center justify-center"><span id="scoreNum" class="text-2xl font-black">–</span></div>
+          </div>
+          <div class="flex-1 min-w-[200px]">
+            <div class="text-xs font-bold uppercase tracking-[0.18em] text-espresso/60 mb-2">SEO slug score</div>
+            <ul id="scoreChecks" class="text-sm space-y-1.5"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ BULK PANEL ============ -->
+    <div id="panelBulk" class="p-5 sm:p-8 hidden">
+      <label for="bulkInput" class="sans text-xs font-bold uppercase tracking-[0.18em] text-espresso/60">Paste titles — one per line (max 50)</label>
+      <textarea id="bulkInput" rows="7" spellcheck="false"
+        placeholder="10 Morning Rituals for Better Focus&#10;Café Culture: A Beginner's Guide&#10;How to Brew the Perfect Espresso"
+        class="sans mt-2 w-full bg-white border-2 border-espresso rounded-xl px-4 py-3 text-base placeholder:text-espresso/30 focus:outline-none focus:ring-4 focus:ring-tang/30"></textarea>
+      <div class="sans mt-4 flex flex-wrap items-center gap-3">
+        <button id="bulkGo" class="bg-tang hover:bg-tangdark text-white font-bold px-6 py-3 rounded-xl transition shadow">Generate slugs</button>
+        <button id="bulkSample" class="border-2 border-espresso font-bold px-4 py-2.5 rounded-xl hover:bg-espresso hover:text-paper transition text-sm">Load sample</button>
+        <span id="bulkNote" class="text-sm text-espresso/60"></span>
+      </div>
+      <div id="bulkResults" class="sans mt-5 hidden">
+        <div class="flex flex-wrap gap-3 mb-3">
+          <button id="copyAllBtn" class="bg-espresso text-paper text-sm font-bold px-4 py-2 rounded-lg hover:bg-tang transition">Copy all slugs</button>
+          <button id="csvBtn" class="border-2 border-espresso text-sm font-bold px-4 py-2 rounded-lg hover:bg-espresso hover:text-paper transition">Download CSV</button>
+          <span id="bulkCopyMsg" class="text-sm text-espresso/60 self-center"></span>
+        </div>
+        <div class="overflow-x-auto border-2 border-espresso rounded-xl">
+          <table class="w-full text-sm">
+            <thead><tr class="bg-espresso text-paper text-left">
+              <th class="px-3 py-2.5 font-bold w-10">#</th><th class="px-3 py-2.5 font-bold">Title</th><th class="px-3 py-2.5 font-bold">Slug</th><th class="px-3 py-2.5 font-bold w-16"></th>
+            </tr></thead>
+            <tbody id="bulkTable" class="bg-white divide-y divide-espresso/10"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="sans text-center text-xs text-espresso/50 mt-4">Everything runs in your browser — your titles never leave this page.</p>
+</main>
+
+<!-- ===================== BOTTOM AD (verbatim) ===================== -->
+<div class="no-print mx-auto max-w-6xl px-4 sm:px-6 pb-4" role="complementary" aria-label="Advertisement">
+  <div class="mx-auto text-center" style="max-width:728px">
+    <span class="block text-[10px] tracking-[0.18em] uppercase text-slate-400 mb-1.5">Advertisement</span>
+    <div class="flex justify-center overflow-hidden">
+      <script async src="https://js.wpadmngr.com/static/adManager.js" data-admpid="464498"></script>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SEO ARTICLE ===================== -->
+<article id="article" class="mx-auto max-w-4xl px-4 sm:px-6 py-10">
+  <h2 class="text-3xl sm:text-4xl font-bold leading-tight">The Complete Guide to URL Slugs: What They Are, Why They Matter, and How to Write SEO-Friendly Ones</h2>
+  <p class="sans text-espresso/70 mt-3 text-sm">A practical, jargon-light guide for bloggers, marketers and indie makers — by the SlugWise team.</p>
+
+  <h3 class="text-2xl font-bold mt-10">What Is a URL Slug?</h3>
+  <p class="mt-4 leading-relaxed">A URL slug is the readable, human-friendly part of a web address that identifies a specific page. In the address <span class="mono text-sm bg-cream px-1.5 py-0.5 rounded">example.com/blog/best-espresso-machines</span>, the slug is <span class="mono text-sm bg-cream px-1.5 py-0.5 rounded">best-espresso-machines</span> — the final segment after the last slash. The term comes from the publishing world, where a "slug" was a short name given to an article in production. On the web, slugs are generated from page titles so that both readers and search engines can guess what a page is about before opening it. A good slug uses only lowercase letters, numbers and hyphens. It contains no spaces, no uppercase letters, no punctuation and no special characters. Most content management systems create slugs automatically when you type a title, but the automatic result is often far from ideal: it may be too long, include meaningless filler words, or mangle accented characters. That is exactly why a dedicated URL slug generator earns its place in a writer's toolkit — it applies the rules of clean slug creation consistently, every single time.</p>
+
+  <h3 class="text-2xl font-bold mt-10">Why URL Slugs Matter for SEO</h3>
+  <p class="mt-4 leading-relaxed">Google has confirmed that the words in a URL are a ranking signal, albeit a lightweight one. A descriptive slug will not rescue thin content, but it does reinforce topical relevance: when your target keyword appears in the slug, it is one more small confirmation to the search engine that the page is about that topic. The bigger SEO payoff, however, is indirect and arguably more valuable. First, click-through rate. A short, readable URL in the search results looks trustworthy and tells the searcher exactly what they will get; studies consistently show that clean URLs earn more clicks than cryptic ones like <span class="mono text-sm bg-cream px-1.5 py-0.5 rounded">/p?id=48291</span>. Second, crawlability and sharing. Short slugs survive copy-paste sharing on social media and messaging apps without breaking across lines, and they are easier for other sites to link to — and links remain one of the strongest ranking factors. Third, user trust. People hover over links before clicking, and a slug that reads like a sentence fragment ("ultimate-guide-sourdough-bread") inspires far more confidence than a string of parameters. Finally, there is the generative-search angle: as AI answer engines quote and cite web pages, legible slugs make your content easier to reference accurately. In short, the slug is a small lever, but it is one you pull on every single page you publish, so the effect compounds across an entire site.</p>
+
+  <h3 class="text-2xl font-bold mt-10">The Anatomy of a Perfect Slug</h3>
+  <p class="mt-4 leading-relaxed">The perfect slug has five qualities: it is short, descriptive, lowercase, hyphen-separated and stable. "Short" means three to five meaningful words, roughly under 60 characters — long enough to carry the keyword, short enough to display fully in search results and mobile screens. "Descriptive" means it mirrors the page's core topic rather than the full title; a post titled "The 17 Best Espresso Machines for Home Baristas in 2026 (Tested &amp; Reviewed)" becomes <span class="mono text-sm bg-cream px-1.5 py-0.5 rounded">best-espresso-machines-home</span>, not a word-for-word copy of the headline. "Lowercase" matters because some servers treat uppercase and lowercase URLs as different pages, which can split ranking signals or create duplicate-content issues. "Hyphen-separated" is the long-standing standard: Google explicitly reads hyphens as word boundaries. "Stable" means you choose the slug once and keep it — changing a published slug breaks inbound links and social shares unless you set up redirects, so it pays to get it right at publish time. A slug generator that enforces all five rules automatically removes the guesswork and the inconsistency that creeps in when different authors hand-craft slugs.</p>
+
+  <h3 class="text-2xl font-bold mt-10">Hyphens vs. Underscores: Why It Matters</h3>
+  <p class="mt-4 leading-relaxed">One of the most common slug questions is whether to separate words with hyphens (<span class="mono text-sm bg-cream px-1.5 py-0.5 rounded">best-espresso-machines</span>) or underscores (<span class="mono text-sm bg-cream px-1.5 py-0.5 rounded">best_espresso_machines</span>). The answer is unambiguous: use hyphens. Google's own documentation and engineer statements have long confirmed that hyphens are treated as word separators while underscores join words into a single token — so <span class="mono text-sm bg-cream px-1.5 py-0.5 rounded">best_espresso_machines</span> may be read as one long word, "bestespressomachines", which dilutes keyword matching. Dots are occasionally used as separators in some systems, but they are not recommended for ordinary blog slugs either. Underscores still have their place — in programming identifiers like <span class="mono text-sm bg-cream px-1.5 py-0.5 rounded">snake_case</span> variable names — but for public URLs, hyphens are the standard every SEO guide agrees on. SlugWise defaults to hyphens and lets you switch separators only when you have a specific technical reason, such as generating identifiers for code rather than URLs.</p>
+
+  <h3 class="text-2xl font-bold mt-10">Stop Words: Keep or Remove?</h3>
+  <p class="mt-4 leading-relaxed">Stop words are the small glue words of a language — "the", "a", "an", "and", "or", "of", "in", "with", "for" and dozens more. They carry almost no search meaning, yet they consume precious characters in a slug. Removing them is standard practice: "How to Brew the Perfect Espresso at Home" becomes <span class="mono text-sm bg-cream px-1.5 py-0.5 rounded">brew-perfect-espresso-home</span> instead of <span class="mono text-sm bg-cream px-1.5 py-0.5 rounded">how-to-brew-the-perfect-espresso-at-home</span>. The shorter version keeps every meaningful keyword while cutting the length nearly in half. There are exceptions: sometimes a stop word changes meaning ("the who" the band vs. "who"), and in brand names or quoted phrases you should keep the exact wording. A good slug tool therefore makes stop-word removal a toggle rather than a forced rule, and flags any stop words that survive so you can make an informed decision. SlugWise ships with a curated list of over 100 English stop words and shows you exactly which ones were detected in its SEO score panel.</p>
+
+  <h3 class="text-2xl font-bold mt-10">Accents, Diacritics and Special Characters</h3>
+  <p class="mt-4 leading-relaxed">The web is multilingual, but URLs are happiest in plain ASCII. Titles like "Café Culture", "Crème Brûlée" or "Straße" contain characters that are technically allowed in modern URLs yet cause real problems: they get percent-encoded into ugly sequences like <span class="mono text-sm bg-cream px-1.5 py-0.5 rounded">caf%C3%A9</span>, break in some email clients, and confuse analytics tools. The professional solution is transliteration — mapping each accented character to its closest ASCII equivalent before building the slug, so "Café" becomes "cafe" and "Straße" becomes "strasse". Unicode normalization (NFKD decomposition) handles most Latin diacritics elegantly: "é" decomposes into "e" plus a combining accent mark, and stripping the mark leaves a clean "e". Special cases like the German "ß" (which becomes "ss"), "æ" ("ae") and "œ" ("oe") need explicit mapping tables. This is why SlugWise shows you a live before → after character map: you can verify at a glance that every accent was handled sensibly instead of silently dropped. For scripts with no Latin equivalent, such as Chinese or Arabic, the safest approach is to drop the characters or supply a romanized version manually — never leave raw non-ASCII text in a public slug.</p>
+
+  <h3 class="text-2xl font-bold mt-10">Slug Length and Keyword Placement</h3>
+  <p class="mt-4 leading-relaxed">How long should a slug be? The consensus among SEO practitioners is clear: aim for three to five words and stay under 60 characters. Slugs longer than that get truncated in search results, look cluttered when shared, and dilute the relevance of each individual word. If your title naturally produces a 90-character slug, trim it to the essential keywords rather than truncating mid-thought — this is where a max-length control with word-boundary awareness beats a naive character cut. Equally important is keyword placement: put your primary keyword as close to the front of the slug as possible. Search engines and human readers both weight the beginning of a URL more heavily, so <span class="mono text-sm bg-cream px-1.5 py-0.5 rounded">espresso-machine-guide</span> is stronger than <span class="mono text-sm bg-cream px-1.5 py-0.5 rounded">ultimate-beginners-guide-espresso-machine</span>. A practical workflow is to decide your target keyword before writing the title, then verify with the slug score that the keyword lands up front, the length is sane, and no filler words slipped through.</p>
+
+  <h3 class="text-2xl font-bold mt-10">Bulk Slug Generation for Large Sites</h3>
+  <p class="mt-4 leading-relaxed">Generating one slug at a time is fine for a personal blog, but content teams, e-commerce stores and programmatic SEO projects often need hundreds of slugs at once. Product catalogs, migrated archives and auto-generated landing pages all demand consistent, rule-abiding slugs at scale — and doing them by hand invites exactly the inconsistencies that hurt SEO: mixed separators, stray uppercase letters, forgotten stop words. A bulk mode solves this by applying the same slugification pipeline to a whole list of titles in one pass. Paste up to fifty titles, get a tidy table of title → slug pairs, review them, then copy everything or export a CSV for your CMS import. Because the same rules (separator, max length, stop-word list, transliteration) govern every row, the output is uniform across the entire batch. SlugWise's bulk mode is built for precisely this workflow, and it runs entirely in the browser, so even proprietary or embargoed titles never travel over the network.</p>
+
+  <h3 class="text-2xl font-bold mt-10">Common Slug Mistakes to Avoid</h3>
+  <p class="mt-4 leading-relaxed">Even experienced publishers fall into a few recurring slug traps. The first is keyword stuffing: <span class="mono text-sm bg-cream px-1.5 py-0.5 rounded">best-espresso-machine-buy-espresso-machine-cheap</span> reads as spam to both users and algorithms — one clean mention of the keyword is enough. The second is including dates: <span class="mono text-sm bg-cream px-1.5 py-0.5 rounded">best-phones-2024</span> looks outdated the moment the year turns; keep slugs evergreen and put the date in the content or metadata instead. The third is changing slugs after publishing without redirects, which orphans backlinks and social shares — if you must rename, add a 301 redirect from the old URL and update internal links. The fourth is letting auto-generated slugs include meaningless IDs or session parameters. The fifth is inconsistent casing or separators across a site, which fragments crawl signals. A checklist-driven tool catches all five: SlugWise's SEO score verifies length, stop words, descriptiveness, character validity and keyword position on every slug you generate, so mistakes get flagged before they reach production.</p>
+
+  <h3 class="text-2xl font-bold mt-10">Beyond kebab-case: When to Use Other Case Styles</h3>
+  <p class="mt-4 leading-relaxed">While kebab-case (hyphenated lowercase) is the standard for public URLs, the same title-to-identifier pipeline is useful for other formats developers encounter daily. Snake_case is the convention for database columns, Python variables and many API fields; converting "Monthly Revenue Report" to <span class="mono text-sm bg-cream px-1.5 py-0.5 rounded">monthly_revenue_report</span> keeps naming consistent across a codebase. CamelCase powers JavaScript variables and JSON keys — <span class="mono text-sm bg-cream px-1.5 py-0.5 rounded">monthlyRevenueReport</span> — and follows the same transliteration and stop-word logic, just with different joining rules. Having all three outputs from a single input means writers, SEOs and developers can share one tool instead of three, and the underlying slug engine stays identical so nothing gets lost in translation. SlugWise's case tabs generate kebab-case, snake_case and camelCase from the same title with the same options applied, making it as handy in a code editor as it is in a CMS.</p>
+
+  <!-- ============ FAQS ============ -->
+  <h2 class="text-3xl font-bold mt-14">Frequently Asked Questions</h2>
+  <div class="mt-6 space-y-4">
+    <details class="faq-item bg-white border-2 border-espresso/20 rounded-xl p-5 open:border-espresso">
+      <summary class="sans font-bold cursor-pointer text-lg">What is a URL slug?</summary>
+      <p class="sans text-espresso/70 mt-3 leading-relaxed">A URL slug is the readable portion of a web address that identifies a specific page — for example, <span class="mono text-sm">best-espresso-machines</span> in <span class="mono text-sm">example.com/blog/best-espresso-machines</span>. Slugs are lowercase, hyphen-separated and short, so both people and search engines can tell what the page covers before clicking.</p>
+    </details>
+    <details class="faq-item bg-white border-2 border-espresso/20 rounded-xl p-5 open:border-espresso">
+      <summary class="sans font-bold cursor-pointer text-lg">Do URL slugs affect SEO rankings?</summary>
+      <p class="sans text-espresso/70 mt-3 leading-relaxed">Slightly. Google treats keywords in the URL as a small ranking factor, so a descriptive slug reinforces relevance but will not rank a page on its own. The bigger payoff is indirect: higher click-through rates, easier sharing, more trustworthy-looking links, and cleaner citations — all of which compound across a whole site.</p>
+    </details>
+    <details class="faq-item bg-white border-2 border-espresso/20 rounded-xl p-5 open:border-espresso">
+      <summary class="sans font-bold cursor-pointer text-lg">Should I use hyphens or underscores in a slug?</summary>
+      <p class="sans text-espresso/70 mt-3 leading-relaxed">Always use hyphens. Google reads <span class="mono text-sm">url-slug</span> as two separate words but treats <span class="mono text-sm">url_slug</span> as a single token, which can hurt how the page is interpreted. Hyphens are the long-standing standard for word separation in URLs; reserve underscores for code identifiers, not public slugs.</p>
+    </details>
+    <details class="faq-item bg-white border-2 border-espresso/20 rounded-xl p-5 open:border-espresso">
+      <summary class="sans font-bold cursor-pointer text-lg">How long should a URL slug be?</summary>
+      <p class="sans text-espresso/70 mt-3 leading-relaxed">Aim for three to five meaningful words and stay under 60 characters. Short slugs display fully in search results, survive copy-paste sharing, and concentrate keyword relevance. Put your primary keyword near the front and cut anything that does not change the meaning of the URL.</p>
+    </details>
+    <details class="faq-item bg-white border-2 border-espresso/20 rounded-xl p-5 open:border-espresso">
+      <summary class="sans font-bold cursor-pointer text-lg">Should I remove stop words from slugs?</summary>
+      <p class="sans text-espresso/70 mt-3 leading-relaxed">Usually yes. Words like "the", "and", "of" and "with" add length without meaning, so removing them keeps slugs short and keyword-dense. Keep them only when they change the meaning — brand names, quoted phrases, or titles where the stop word is essential for clarity.</p>
+    </details>
+    <details class="faq-item bg-white border-2 border-espresso/20 rounded-xl p-5 open:border-espresso">
+      <summary class="sans font-bold cursor-pointer text-lg">Can I change a URL slug after publishing?</summary>
+      <p class="sans text-espresso/70 mt-3 leading-relaxed">Yes, but carefully. Publish the new slug, add a 301 redirect from the old URL to preserve link equity, then update your internal links to point at the new address. Only rename slugs that are genuinely misleading — cosmetic changes on an already-ranking page usually cost more than they earn.</p>
+    </details>
+  </div>
+</article>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "What is a URL slug?", "acceptedAnswer": { "@type": "Answer", "text": "A URL slug is the readable portion of a web address that identifies a specific page — for example, best-espresso-machines in example.com/blog/best-espresso-machines. Slugs are lowercase, hyphen-separated and short, so both people and search engines can tell what the page covers before clicking." } },
+    { "@type": "Question", "name": "Do URL slugs affect SEO rankings?", "acceptedAnswer": { "@type": "Answer", "text": "Slightly. Google treats keywords in the URL as a small ranking factor, so a descriptive slug reinforces relevance but will not rank a page on its own. The bigger payoff is indirect: higher click-through rates, easier sharing, more trustworthy-looking links, and cleaner citations." } },
+    { "@type": "Question", "name": "Should I use hyphens or underscores in a slug?", "acceptedAnswer": { "@type": "Answer", "text": "Always use hyphens. Google reads url-slug as two separate words but treats url_slug as a single token, which can hurt how the page is interpreted. Hyphens are the long-standing standard for word separation in URLs." } },
+    { "@type": "Question", "name": "How long should a URL slug be?", "acceptedAnswer": { "@type": "Answer", "text": "Aim for three to five meaningful words and stay under 60 characters. Short slugs display fully in search results, survive copy-paste sharing, and concentrate keyword relevance. Put your primary keyword near the front." } },
+    { "@type": "Question", "name": "Should I remove stop words from slugs?", "acceptedAnswer": { "@type": "Answer", "text": "Usually yes. Words like the, and, of and with add length without meaning, so removing them keeps slugs short and keyword-dense. Keep them only when they change the meaning, such as in brand names or quoted phrases." } },
+    { "@type": "Question", "name": "Can I change a URL slug after publishing?", "acceptedAnswer": { "@type": "Answer", "text": "Yes, but carefully. Publish the new slug, add a 301 redirect from the old URL to preserve link equity, then update your internal links. Only rename slugs that are genuinely misleading — cosmetic changes on a ranking page usually cost more than they earn." } }
+  ]
+}
+</script>
+
+<footer class="border-t-2 border-espresso mt-6">
+  <div class="sans mx-auto max-w-6xl px-4 sm:px-6 py-6 flex flex-wrap items-center justify-between gap-3 text-sm text-espresso/60">
+    <span><strong class="text-espresso">SlugWise</strong> — free URL slug generator. No signup, no paywall.</span>
+    <nav class="flex gap-5"><a href="#top" class="hover:text-tang">Home</a><a href="https://fixoraa.tech" class="hover:text-tang">More Tools</a></nav>
+  </div>
+</footer>
+
+<!-- ===================== SLUGWISE CORE LIB (pure functions, no DOM) ===================== -->
+<script id="slugwise-lib">
+'use strict';
+/* SlugWise core slugification engine. Pure functions only — shared with Node tests. */
+
+const SW_STOP_WORDS = new Set(("a,an,the,and,or,but,nor,for,so,yet,of,in,on,at,to,from,by,with,about,into,over,after,before,between,under,above,up,out,off,as,is,are,was,were,be,been,being,am,it,its,this,that,these,those,i,you,he,she,we,they,them,his,her,hers,our,ours,your,yours,their,theirs,my,mine,me,us,not,no,do,does,did,done,doing,have,has,had,having,will,would,can,could,shall,should,may,might,must,just,than,then,there,here,when,where,why,how,what,which,who,whom,whose,all,any,both,each,few,more,most,other,some,such,only,own,same,too,per,via,vs,etc").split(","));
+
+const SW_SPECIAL = {
+  'ß':'ss','ẞ':'ss','æ':'ae','Æ':'ae','œ':'oe','Œ':'oe','ø':'o','Ø':'o',
+  'å':'a','Å':'a','ä':'a','Ä':'a','ö':'o','Ö':'o','ü':'u','Ü':'u',
+  'ð':'d','Ð':'d','þ':'th','Þ':'th','ł':'l','Ł':'l','đ':'d','Đ':'d',
+  'ı':'i','ŋ':'n','ç':'c','Ç':'c','ñ':'n','Ñ':'n','š':'s','Š':'s',
+  'ž':'z','Ž':'z','ý':'y','Ý':'y','ÿ':'y','ë':'e','Ë':'e','ï':'i','Ï':'i'
+};
+
+const SW_COMBINING = /[\u0300-\u036f\u1ab0-\u1aff\u1dc0-\u1dff\u20d0-\u20ff\ufe20-\ufe2f]/g;
+
+function swTransliterateChar(ch) {
+  if (Object.prototype.hasOwnProperty.call(SW_SPECIAL, ch)) return SW_SPECIAL[ch];
+  const d = ch.normalize('NFKD').replace(SW_COMBINING, '');
+  if (d === ch) return (/[ -~]/.test(d) ? d : ''); // non-transliterable script -> drop
+  return d.replace(/[^\x00-\x7F]/g, '');
+}
+
+/* Returns { text, mappings:[{from,to}] } — mappings are distinct chars that changed. */
+function swTransliterate(text) {
+  const mappings = [];
+  const seen = new Set();
+  let out = '';
+  for (const ch of String(text)) {
+    const rep = swTransliterateChar(ch);
+    out += rep;
+    if (rep !== ch && !seen.has(ch)) {
+      seen.add(ch);
+      mappings.push({ from: ch, to: rep === '' ? '(removed)' : rep });
+    }
+  }
+  return { text: out, mappings: mappings };
+}
+
+function swWords(text, removeStopWords) {
+  if (text == null) return [];
+  // strip apostrophes/quote marks (don't -> dont, like WordPress) before splitting
+  const t = swTransliterate(String(text)).text.toLowerCase().replace(/[''‘`]/g, '');
+  const words = t.split(/[^a-z0-9]+/).filter(Boolean);
+  return removeStopWords ? words.filter(w => !SW_STOP_WORDS.has(w)) : words;
+}
+
+/* Truncate to maxLength, preferring a word boundary when the cut splits a word. */
+function swTruncate(slug, maxLength, separator) {
+  if (slug.length <= maxLength) return slug;
+  let cut = slug.slice(0, maxLength);
+  if (/[a-z0-9]/.test(slug.charAt(maxLength))) {
+    const idx = cut.lastIndexOf(separator);
+    if (idx > 0) cut = cut.slice(0, idx);
+  }
+  return cut.replace(/[-_.]+$/, '');
+}
+
+function slugify(text, opts) {
+  opts = opts || {};
+  const separator = opts.separator || '-';
+  const maxLength = (opts.maxLength == null) ? 60 : Math.max(1, Math.floor(opts.maxLength));
+  const words = swWords(text, !!opts.removeStopWords);
+  if (!words.length) return '';
+  return swTruncate(words.join(separator), maxLength, separator);
+}
+
+function toKebab(text, opts) { return slugify(text, Object.assign({}, opts, { separator: '-' })); }
+function toSnake(text, opts) { return slugify(text, Object.assign({}, opts, { separator: '_' })); }
+
+function toCamel(text, opts) {
+  opts = opts || {};
+  const words = swWords(text, !!opts.removeStopWords);
+  if (!words.length) return '';
+  const maxLength = (opts.maxLength == null) ? 60 : Math.max(1, Math.floor(opts.maxLength));
+  let out = words[0] + words.slice(1).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('');
+  return out.length > maxLength ? out.slice(0, maxLength) : out;
+}
+
+/* SEO slug score: 5 checks, each worth 20 points. */
+function slugScore(slug, opts) {
+  opts = opts || {};
+  const s = String(slug || '');
+  const words = s.split(/[-_]+/).filter(Boolean);
+  const checks = [];
+  checks.push({ key: 'length', label: 'Under 60 characters (' + s.length + ')', passed: s.length > 0 && s.length <= 60 });
+  const hasStop = words.some(w => SW_STOP_WORDS.has(w));
+  checks.push({ key: 'stopwords', label: hasStop ? 'Contains stop words' : 'No stop words', passed: s.length > 0 && !hasStop });
+  checks.push({ key: 'descriptive', label: 'Descriptive — 3+ words (' + words.length + ')', passed: words.length >= 3 });
+  checks.push({ key: 'format', label: 'Lowercase, valid URL characters', passed: s.length > 0 && /^[a-z0-9]+([-_][a-z0-9]+)*$/.test(s) });
+  const first = words[0] || '';
+  checks.push({ key: 'keyword', label: 'Strong keyword up front', passed: first.length >= 4 && !SW_STOP_WORDS.has(first) });
+  const passedCount = checks.filter(c => c.passed).length;
+  return { score: Math.round(passedCount / checks.length * 100), checks: checks, words: words.length, length: s.length };
+}
+
+/* Bulk: up to 50 non-empty lines -> title/slug rows. */
+function bulkSlugify(text, opts) {
+  opts = opts || {};
+  const lines = String(text || '').split(/\r?\n/);
+  const rows = [];
+  let skippedEmpty = 0;
+  for (const line of lines) {
+    const t = line.trim();
+    if (!t) { skippedEmpty++; continue; }
+    if (rows.length >= 50) break;
+    rows.push({ title: t, slug: slugify(t, opts) });
+  }
+  const total = lines.filter(l => l.trim()).length;
+  return { rows: rows, skippedEmpty: skippedEmpty, truncated: total > 50, total: total };
+}
+</script>
+
+<!-- ===================== UI WIRING ===================== -->
+<script>
+(function () {
+  'use strict';
+  const $ = id => document.getElementById(id);
+  const state = { mode: 'single', caseStyle: 'kebab', separator: '-', maxLength: 60, removeStopWords: true };
+
+  // restore prefs
+  try {
+    const saved = JSON.parse(localStorage.getItem('slugwise-prefs') || '{}');
+    if (saved.separator && ['-', '_', '.'].includes(saved.separator)) state.separator = saved.separator;
+    if (saved.maxLength) state.maxLength = saved.maxLength;
+    if (typeof saved.removeStopWords === 'boolean') state.removeStopWords = saved.removeStopWords;
+    if (saved.caseStyle && ['kebab', 'snake', 'camel'].includes(saved.caseStyle)) state.caseStyle = saved.caseStyle;
+  } catch (e) {}
+  function savePrefs() {
+    try { localStorage.setItem('slugwise-prefs', JSON.stringify(state)); } catch (e) {}
+  }
+
+  function opts() { return { separator: state.separator, maxLength: state.maxLength, removeStopWords: state.removeStopWords }; }
+
+  function currentVariant(title) {
+    if (state.caseStyle === 'snake') return toSnake(title, opts());
+    if (state.caseStyle === 'camel') return toCamel(title, opts());
+    return toKebab(title, opts());
+  }
+
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+
+  function renderSingle() {
+    const title = $('titleInput').value;
+    const slug = currentVariant(title);
+    const prev = $('slugPreview');
+    if (!slug) {
+      prev.textContent = 'your-awesome-slug';
+      prev.classList.add('opacity-40');
+    } else {
+      prev.textContent = slug;
+      prev.classList.remove('opacity-40');
+    }
+    $('charCount').textContent = slug.length;
+    $('wordCount').textContent = slug ? slug.split(/[-_]+/).filter(Boolean).length : 0;
+
+    // transliteration chips
+    const tr = swTransliterate(title);
+    const chips = $('translitChips');
+    chips.innerHTML = '';
+    $('translitEmpty').style.display = tr.mappings.length ? 'none' : '';
+    tr.mappings.slice(0, 16).forEach(m => {
+      const el = document.createElement('span');
+      el.className = 'mono text-sm bg-cream border border-espresso/30 rounded-lg px-2.5 py-1';
+      el.innerHTML = '<strong>' + esc(m.from) + '</strong> <span class="text-tang font-bold">&rarr;</span> ' + esc(m.to);
+      chips.appendChild(el);
+    });
+    if (tr.mappings.length > 16) {
+      const more = document.createElement('span');
+      more.className = 'text-sm text-espresso/50 self-center';
+      more.textContent = '+' + (tr.mappings.length - 16) + ' more';
+      chips.appendChild(more);
+    }
+
+    // SEO score
+    const res = slugScore(slug, opts());
+    if (!slug) {
+      $('scoreNum').textContent = '–';
+      $('scoreRing').setAttribute('stroke-dashoffset', '264');
+    } else {
+      $('scoreNum').textContent = res.score;
+      $('scoreRing').setAttribute('stroke-dashoffset', String(264 - 264 * res.score / 100));
+      $('scoreRing').setAttribute('stroke', res.score >= 80 ? '#16a34a' : (res.score >= 60 ? '#F97316' : '#dc2626'));
+    }
+    const ul = $('scoreChecks');
+    ul.innerHTML = '';
+    res.checks.forEach(c => {
+      const li = document.createElement('li');
+      li.className = 'flex items-start gap-2 ' + (c.passed ? 'text-espresso' : 'text-espresso/45');
+      li.innerHTML = '<span class="font-black ' + (c.passed ? 'text-green-700' : 'text-red-600') + '">' + (c.passed ? '✓' : '✗') + '</span><span>' + esc(c.label) + '</span>';
+      ul.appendChild(li);
+    });
+  }
+
+  function copyText(text, msgEl, okMsg) {
+    const done = () => { msgEl.textContent = okMsg; setTimeout(() => { msgEl.textContent = ''; }, 2000); };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, () => fallbackCopy(text, done));
+    } else fallbackCopy(text, done);
+  }
+  function fallbackCopy(text, done) {
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); done(); } catch (e) {}
+    document.body.removeChild(ta);
+  }
+
+  // events: single
+  $('titleInput').addEventListener('input', renderSingle);
+  $('copyBtn').addEventListener('click', () => {
+    const slug = currentVariant($('titleInput').value);
+    if (!slug) { $('copyMsg').textContent = 'Type a title first.'; return; }
+    copyText(slug, $('copyMsg'), 'Copied to clipboard ✓');
+  });
+  document.querySelectorAll('.seg-btn').forEach(b => {
+    if (b.dataset.sep === state.separator) { document.querySelectorAll('.seg-btn').forEach(x => x.classList.remove('seg-active')); b.classList.add('seg-active'); }
+    b.addEventListener('click', () => {
+      document.querySelectorAll('.seg-btn').forEach(x => x.classList.remove('seg-active'));
+      b.classList.add('seg-active');
+      state.separator = b.dataset.sep; savePrefs(); renderSingle();
+    });
+  });
+  $('maxLen').value = state.maxLength;
+  $('maxLen').addEventListener('input', () => {
+    let v = parseInt($('maxLen').value, 10);
+    if (isNaN(v)) v = 60;
+    state.maxLength = Math.min(120, Math.max(10, v));
+    savePrefs(); renderSingle();
+  });
+  $('stopWords').checked = state.removeStopWords;
+  $('stopWords').addEventListener('change', () => { state.removeStopWords = $('stopWords').checked; savePrefs(); renderSingle(); renderBulk(); });
+  document.querySelectorAll('.case-btn').forEach(b => {
+    if (b.dataset.case === state.caseStyle) { document.querySelectorAll('.case-btn').forEach(x => { x.classList.remove('tab-active'); x.classList.add('text-espresso/60'); }); b.classList.add('tab-active'); b.classList.remove('text-espresso/60'); }
+    b.addEventListener('click', () => {
+      document.querySelectorAll('.case-btn').forEach(x => { x.classList.remove('tab-active'); x.classList.add('text-espresso/60'); });
+      b.classList.add('tab-active'); b.classList.remove('text-espresso/60');
+      state.caseStyle = b.dataset.case; savePrefs(); renderSingle();
+    });
+  });
+
+  // events: mode tabs
+  function setMode(m) {
+    state.mode = m;
+    $('panelSingle').classList.toggle('hidden', m !== 'single');
+    $('panelBulk').classList.toggle('hidden', m !== 'bulk');
+    [['modeSingle', 'single'], ['modeBulk', 'bulk']].forEach(([id, mm]) => {
+      $(id).classList.toggle('tab-active', m === mm);
+      $(id).classList.toggle('text-espresso/60', m !== mm);
+    });
+  }
+  $('modeSingle').addEventListener('click', () => setMode('single'));
+  $('modeBulk').addEventListener('click', () => setMode('bulk'));
+
+  // events: bulk
+  function renderBulk() {
+    const res = bulkSlugify($('bulkInput').value, opts());
+    const box = $('bulkResults');
+    if (!res.rows.length) { box.classList.add('hidden'); $('bulkNote').textContent = ''; return; }
+    box.classList.remove('hidden');
+    const notes = [];
+    notes.push(res.rows.length + ' slug' + (res.rows.length === 1 ? '' : 's'));
+    if (res.skippedEmpty) notes.push(res.skippedEmpty + ' empty line' + (res.skippedEmpty === 1 ? '' : 's') + ' skipped');
+    if (res.truncated) notes.push('limited to first 50');
+    $('bulkNote').textContent = notes.join(' · ');
+    const tb = $('bulkTable');
+    tb.innerHTML = '';
+    res.rows.forEach((r, i) => {
+      const tr = document.createElement('tr');
+      tr.className = 'hover:bg-cream/60';
+      tr.innerHTML = '<td class="px-3 py-2.5 text-espresso/50 font-bold">' + (i + 1) + '</td>' +
+        '<td class="px-3 py-2.5">' + esc(r.title) + '</td>' +
+        '<td class="px-3 py-2.5 mono text-sm text-tangdark break-all">' + (esc(r.slug) || '<span class="text-espresso/40">—</span>') + '</td>' +
+        '<td class="px-3 py-2.5"><button class="row-copy text-xs font-bold border border-espresso rounded px-2 py-1 hover:bg-espresso hover:text-paper transition" data-i="' + i + '">Copy</button></td>';
+      tb.appendChild(tr);
+    });
+    tb.querySelectorAll('.row-copy').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const r = bulkSlugify($('bulkInput').value, opts()).rows[parseInt(btn.dataset.i, 10)];
+        if (r && r.slug) copyText(r.slug, $('bulkCopyMsg'), 'Slug #' + (parseInt(btn.dataset.i, 10) + 1) + ' copied ✓');
+      });
+    });
+    box.dataset.rows = JSON.stringify(res.rows);
+  }
+  $('bulkGo').addEventListener('click', renderBulk);
+  $('bulkInput').addEventListener('input', renderBulk);
+  $('bulkSample').addEventListener('click', () => {
+    $('bulkInput').value = '10 Morning Rituals for Better Focus\nCafé Culture: A Beginner\u2019s Guide\nHow to Brew the Perfect Espresso at Home\nThe Ultimate Sourdough Bread Recipe\nStraße Food: Berlin\u2019s Best Currywurst Spots';
+    renderBulk();
+  });
+  $('copyAllBtn').addEventListener('click', () => {
+    const rows = JSON.parse($('bulkResults').dataset.rows || '[]');
+    const slugs = rows.map(r => r.slug).filter(Boolean);
+    if (!slugs.length) { $('bulkCopyMsg').textContent = 'No slugs to copy.'; return; }
+    copyText(slugs.join('\n'), $('bulkCopyMsg'), slugs.length + ' slugs copied ✓');
+  });
+  $('csvBtn').addEventListener('click', () => {
+    const rows = JSON.parse($('bulkResults').dataset.rows || '[]');
+    if (!rows.length) return;
+    const q = s => '"' + String(s).replace(/"/g, '""') + '"';
+    const csv = 'title,slug\n' + rows.map(r => q(r.title) + ',' + q(r.slug)).join('\n');
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
+    a.download = 'slugwise-slugs.csv';
+    document.body.appendChild(a); a.click();
+    setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+    $('bulkCopyMsg').textContent = 'CSV downloaded ✓';
+    setTimeout(() => { $('bulkCopyMsg').textContent = ''; }, 2000);
+  });
+
+  renderSingle();
+})();
+</script>
+</body>
+</html>
